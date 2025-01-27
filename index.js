@@ -1,15 +1,19 @@
+require('dotenv').config();
 const express = require('express');
-const { resolve } = require('path');
+const connectDB = require('./config/db');
+const blogRoutes = require('./routes/blogRoutes');
 
 const app = express();
-const port = 3010;
 
-app.use(express.static('static'));
 
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
-});
+app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+
+connectDB();
+
+
+app.use('/api', blogRoutes);
+
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
